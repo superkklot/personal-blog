@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= article ? article.title : '乘风马博客' %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/highlight-github.css" />
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="app">
+    <aside class="sidebar">
+      <h2>文章列表</h2>
+      <ul class="article-list">
+        <% articles.forEach(function(a) { %>
+          <li>
+            <a href="/articles/<%= a.slug %>" class="<%= a.slug === activeSlug ? 'active' : '' %>">
+              <%= a.title %>
+              <span class="article-date"><%= a.date %></span>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+    </aside>
+
+    <main class="article-content">
+      <% if (article) { %>
+        <h1><%= article.title %></h1>
+        <div class="article-meta">发布于 <%= article.date %></div>
+        <%- article.html %>
+      <% } else if (notFoundSlug) { %>
+        <%- include('partials/not-found', { slug: notFoundSlug }) %>
+      <% } else { %>
+        <%- include('partials/empty') %>
+      <% } %>
+    </main>
+  </div>
+</body>
+</html>
