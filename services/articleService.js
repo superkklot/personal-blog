@@ -1,12 +1,25 @@
 /**
  * 文章服务 — 负责从 articles/ 目录读取 Markdown 文章，
  * 解析 frontmatter 元数据，并使用 marked + highlight.js 渲染为 HTML。
+ *
+ * 使用流程：
+ *   const service = require('./services/articleService');
+ *   const list = await service.listArticles('/path/to/articles');
+ *   const article = await service.getArticleBySlug('/path/to/articles', 'my-post');
  */
+
+// Node.js 原生模块：异步文件操作与路径处理
 const fs = require('node:fs/promises');
 const path = require('node:path');
+
+// 第三方依赖：解析 Markdown 文件头部的 YAML frontmatter（--- ... ---）
 const matter = require('gray-matter');
+
+// 第三方依赖：Markdown → HTML 渲染器（新一代 marked，支持 ESM）
 const { Marked } = require('marked');
+// marked 扩展：桥接 highlight.js 实现代码块语法高亮
 const { markedHighlight } = require('marked-highlight');
+// 代码高亮引擎，支持 190+ 编程语言
 const hljs = require('highlight.js');
 
 // marked 渲染器：启用代码高亮（marked@12+ 需 marked-highlight 扩展桥接）
